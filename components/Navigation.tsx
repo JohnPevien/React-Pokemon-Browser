@@ -1,6 +1,5 @@
 import Link from "next/link";
-type Props = {};
-export default function Navigation({}: Props) {
+export default function Navigation() {
   return (
     <header className="flex  h-20 bg-indigo-900  text-white">
       <div className="container flex items-center">
