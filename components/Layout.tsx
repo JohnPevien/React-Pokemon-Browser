@@ -6,7 +6,7 @@ export default function Layout({ children }: Props) {
   return (
     <>
       <Navigation />
-      <main className="container mt-1">{children}</main>
+      <main className="container mt-2">{children}</main>
     </>
   );
 }
