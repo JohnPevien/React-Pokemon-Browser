@@ -12,6 +12,10 @@ module.exports = {
       fontFamily: {
         sans: ["Plus Jakarta Sans", "sans-serif"],
       },
+      screens: {
+        xxs: "375px",
+        xs: "480px",
+      }
     },
   },
   plugins: [],
