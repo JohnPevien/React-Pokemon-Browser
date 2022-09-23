@@ -3,6 +3,7 @@ import { GetStaticProps } from "next";
 
 import Image from "next/image";
 import Head from "next/head";
+import Link from "next/link";
 
 type Props = {
   pokemon: any;
@@ -51,72 +52,71 @@ function Home({ pokemon }: Props) {
       </Head>
       <section>
         {pokemon && (
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-4 p-4 cursor-pointer">
             {pokemon.map((pokemon: any) => (
-              <div
-                className="bg-white rounded-lg shadow-lg p-4"
-                key={pokemon.name}
-              >
-                <div className="flex justify-center">
-                  <Image
-                    src={pokemon.details.sprites.front_default}
-                    width={96}
-                    height={96}
-                    alt={pokemon.name}
-                  />
+              <Link href={`/pokemon/${pokemon.name}`} key={pokemon.name}>
+                <div className="bg-white rounded-lg shadow-lg py-4 px-6">
+                  <div className="flex justify-center">
+                    <Image
+                      src={pokemon.details.sprites.front_default}
+                      width={96}
+                      height={96}
+                      alt={pokemon.name}
+                    />
+                  </div>
+                  <div className="mt-4">
+                    <h1 className="text-xl font-bold text-center capitalize">
+                      {pokemon.details.name}
+                    </h1>
+                  </div>
+                  <div className="flex flex-row gap-5 justify-center mt-4">
+                    {pokemon.details.types.map((type: any) => (
+                      <p
+                        className={`text-lg text-white text-center capitalize rounded-full px-4 py-1  ${
+                          type.type.name === "grass"
+                            ? "bg-green-500"
+                            : type.type.name === "fire"
+                            ? "bg-red-500"
+                            : type.type.name === "water"
+                            ? "bg-blue-500"
+                            : type.type.name === "bug"
+                            ? "bg-green-700"
+                            : type.type.name === "normal"
+                            ? "bg-gray-400"
+                            : type.type.name === "poison"
+                            ? "bg-purple-500"
+                            : type.type.name === "electric"
+                            ? "bg-yellow-500"
+                            : type.type.name === "ground"
+                            ? "bg-yellow-700"
+                            : type.type.name === "fairy"
+                            ? "bg-pink-500"
+                            : type.type.name === "fighting"
+                            ? "bg-red-700"
+                            : type.type.name === "psychic"
+                            ? "bg-pink-700"
+                            : type.type.name === "rock"
+                            ? "bg-yellow-800"
+                            : type.type.name === "ghost"
+                            ? "bg-purple-700"
+                            : type.type.name === "ice"
+                            ? "bg-blue-200"
+                            : type.type.name === "dragon"
+                            ? "bg-purple-800"
+                            : type.type.name === "dark"
+                            ? "bg-gray-700"
+                            : type.type.name === "steel"
+                            ? "bg-gray-300"
+                            : "bg-gray-500"
+                        }`}
+                        key={type.type.name}
+                      >
+                        {type.type.name}
+                      </p>
+                    ))}
+                  </div>
                 </div>
-                <div className="mt-4">
-                  <h1 className="text-xl font-bold text-center capitalize">
-                    {pokemon.details.name}
-                  </h1>
-                </div>
-                <div className="flex flex-row gap-5 justify-center mt-4">
-                  {pokemon.details.types.map((type: any) => (
-                    <p
-                      className={`text-lg text-white text-center capitalize rounded-full px-4 py-1  ${
-                        type.type.name === "grass"
-                          ? "bg-green-500"
-                          : type.type.name === "fire"
-                          ? "bg-red-500"
-                          : type.type.name === "water"
-                          ? "bg-blue-500"
-                          : type.type.name === "bug"
-                          ? "bg-green-700"
-                          : type.type.name === "normal"
-                          ? "bg-gray-400"
-                          : type.type.name === "poison"
-                          ? "bg-purple-500"
-                          : type.type.name === "electric"
-                          ? "bg-yellow-500"
-                          : type.type.name === "ground"
-                          ? "bg-yellow-700"
-                          : type.type.name === "fairy"
-                          ? "bg-pink-500"
-                          : type.type.name === "fighting"
-                          ? "bg-red-700"
-                          : type.type.name === "psychic"
-                          ? "bg-pink-700"
-                          : type.type.name === "rock"
-                          ? "bg-yellow-800"
-                          : type.type.name === "ghost"
-                          ? "bg-purple-700"
-                          : type.type.name === "ice"
-                          ? "bg-blue-200"
-                          : type.type.name === "dragon"
-                          ? "bg-purple-800"
-                          : type.type.name === "dark"
-                          ? "bg-gray-700"
-                          : type.type.name === "steel"
-                          ? "bg-gray-300"
-                          : "bg-gray-500"
-                      }`}
-                      key={type.type.name}
-                    >
-                      {type.type.name}
-                    </p>
-                  ))}
-                </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}
