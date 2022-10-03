@@ -58,7 +58,7 @@ function Pokemon({ pokemon }: Props) {
 
       <section>
         <div className="flex justify-center">
-          <header className="flex w-full bg-indigo-500 p-5 rounded-xl text-white items-center justify-center drop-shadow-xl">
+          <header className="flex w-full bg-indigo-500 p-5 rounded-xl text-white items-center justify-center shadow-md">
             <div className="flex flex-row w-fit gap-5 items-center">
               <Image
                 src={pokemon.sprites.back_default}
@@ -80,14 +80,14 @@ function Pokemon({ pokemon }: Props) {
           </header>
         </div>
 
-        <div className="flex flex-row mt-5 ">
+        <div className="flex flex-row mt-10 gap-5">
           <div className="w-1/2 bg-gray-200 py-10 px-5 rounded-xl text-neutral-800">
             <h2 className="text-2xl mb-2">Stats</h2>
             <ul className="w-48">
               {pokemon.stats.map((stat: any) => (
                 <li
                   key={stat.stat.name}
-                  className="flex flex-row justify-between w-full"
+                  className="flex flex-col md:flex-row mb-3 md:mb-2 justify-between w-full"
                 >
                   <p className="capitalize">{stat.stat.name}</p>
                   <p>{stat.base_stat}</p>
