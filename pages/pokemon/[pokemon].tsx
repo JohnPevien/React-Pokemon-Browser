@@ -1,9 +1,10 @@
-import { useEffect } from "react";
+import type { PokemonAbilities } from "types";
 import { GetStaticPaths, GetStaticProps } from "next";
 import Image from "next/image";
 import Head from "next/head";
 type Props = {
   pokemon: any;
+  abilities: any[];
 };
 
 interface Pokemon {
@@ -22,10 +23,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
   return { paths, fallback: false };
 };
 
-const getAbilityDetails = async (apiURL: string) => {
+const getAbilityDetails = async (apiURL: string): Promise<PokemonAbilities> => {
   const res = await fetch(apiURL);
-  const ability = await res.json();
-  return ability.effect_entries[0].effect;
+  return await res.json();
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
@@ -35,25 +35,40 @@ export const getStaticProps: GetStaticProps = async (context) => {
     );
     const pokemon = await res.json();
 
+    let abilities: PokemonAbilities[] = await Promise.all(
+      pokemon.abilities.map((ability: any) => {
+        return getAbilityDetails(ability.ability.url);
+      })
+    );
+
+    abilities = abilities.map((ability: PokemonAbilities) => {
+      ability.effect_entries = ability.effect_entries.filter(
+        (effect: any) => effect.language.name === "en"
+      );
+      return ability;
+    });
+
     return {
       props: {
         pokemon,
+        abilities,
       },
     };
   }
   return {
     props: {
       pokemon: null,
+      abilities: null,
     },
   };
 };
 
-function Pokemon({ pokemon }: Props) {
-  useEffect(() => {});
+function Pokemon({ pokemon, abilities }: Props) {
+  console.log(abilities, "abilities");
   return (
     <>
       <Head>
-        <title> Pokemon Browser | ${pokemon.name} </title>
+        <title> Pokemon Browser | {pokemon.name} </title>
       </Head>
 
       <section>
@@ -67,8 +82,8 @@ function Pokemon({ pokemon }: Props) {
                 alt={pokemon.name}
               />
               <div className="flex flex-row items-center">
-                <h1 className="capitalize ">{pokemon.name}</h1>
-                <p className="ml-2"># {pokemon.order}</p>
+                <h1 className="capitalize text-white">{pokemon.name}</h1>
+                <p className="ml-2 text-white"># {pokemon.order}</p>
               </div>
               <Image
                 src={pokemon.sprites.front_default}
@@ -81,7 +96,7 @@ function Pokemon({ pokemon }: Props) {
         </div>
 
         <div className="flex flex-row mt-10 gap-5">
-          <div className="w-1/2 bg-gray-200 py-10 px-5 rounded-xl text-neutral-800">
+          <div className="w-1/2 bg-gray-200 py-10 px-5 rounded-xl">
             <h2 className="text-2xl mb-2">Stats</h2>
             <ul className="w-48">
               {pokemon.stats.map((stat: any) => (
@@ -95,15 +110,20 @@ function Pokemon({ pokemon }: Props) {
               ))}
             </ul>
           </div>
-          <div className="w-1/2 bg-red-400 rounded-lg text-white py-10 px-5">
-            <h2 className="text-2xl mb-2">Abilities</h2>
-            <ul className="w-48">
-              {pokemon.abilities.map((ability: any) => (
+          <div className="w-1/2 bg-red-400 rounded-lg  py-10 px-5">
+            <h2 className="text-2xl mb-2 text-white">Abilities</h2>
+            <ul className="w-full">
+              {abilities.map((ability: any) => (
                 <li
-                  key={ability.ability.name}
-                  className="flex flex-row justify-between w-full"
+                  key={ability.name}
+                  className="flex flex-col justify-between w-full mb-5"
                 >
-                  <p className="capitalize">{ability.ability.name}</p>
+                  <p className="text-white capitalize text-2xl font-semibold mb-2">
+                    {ability.name}
+                  </p>
+                  <p className="text-white">
+                    {ability.effect_entries[0].effect}
+                  </p>
                 </li>
               ))}
             </ul>
